@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Firm</title>
+    <style>
+      :root {
+        --theme-color: #0d47a1;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+      }
+
+      header {
+        background-color: var(--theme-color);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 10px;
+      }
+
+      .headerDiv {
+        display: flex;
+        align-items: center;
+      }
+
+      #toggleSidebar {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px); /* Adjusted for header height */
+      }
+
+      .sidebar {
+        display: flex;
+        background-color: #333;
+        padding: 10px;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .sidebar ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin: 0 15px;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar.collapsed {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sidebar ul {
+          flex-direction: column;
+        }
+
+        .sidebar ul li {
+          margin: 10px 0;
+        }
+      }
+
+      .logout-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .logout-button:hover {
+        background-color: #e5533c;
+      }
+
+      .container2 {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #0d47a1;
+      }
+      label,
+      select,
+      button {
+        display: block;
+        margin-top: 10px; /* Adjusted to match the Create Post page */
+        color: #0d47a1;
+      }
+      select {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        background-color: #0d47a1;
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #08306b;
+      }
+
+      .container2 {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #0d47a1;
+        }
+        input[type="text"], input[type="date"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+     
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="headerDiv">
+        <!-- <button id="toggleSidebar">☰</button> -->
+        <h1>Security Management System</h2>
+      </div>
+      <a href="/logout"><button class="logout-button">Logout</button></a>
+    </header>
+    <div class="container">
+      <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/createReport">Create Report</a></li>
+          <li><a href="/viewReport">View Reports</a></li>
+          <li><a href="/admin">admin</a></li>
+        </ul>
+      </nav>
+      <main>
+        <div class="container2">
+          <h2>Security Report Submission</h1>
+          <form id="reportForm">
+              <label for="officerName">Officer Name:</label>
+              <input type="text" id="officerName" name="officerName" required>
+  
+              <label for="assignedPost">Assigned Post:</label>
+              <input type="text" id="assignedPost" name="assignedPost" required>
+              
+              <label for="reportDate">Date:</label>
+              <input type="date" id="reportDate" name="reportDate" required>
+              
+              <label for="reportSubject">Subject:</label>
+              <input type="text" id="reportSubject" name="reportSubject" required>
+              
+              <label for="reportDetails">Report Details:</label>
+              <textarea id="reportDetails" name="reportDetails" rows="10" required></textarea>
+              
+              <button type="submit">Submit Report</button>
+          </form>
+      </div>
+      </main>
+    </div>
+    <script>
+      document.getElementById('reportForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const officerName = document.getElementById('officerName').value;
+          const reportDate = document.getElementById('reportDate').value;
+          const reportSubject = document.getElementById('reportSubject').value;
+          const reportDetails = document.getElementById('reportDetails').value;
+          const assignedPost = document.getElementById('assignedPost').value;
+
+          const data = {
+              officerName: officerName,
+              reportDate: reportDate,
+              reportSubject: reportSubject,
+              reportDetails: reportDetails,
+              assignedPost: assignedPost
+          };
+
+          fetch('http://localhost:3000/createReport', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(data),
+          })
+          .then(response => {
+              if (response.ok) {
+                  alert('Report submitted successfully!');
+                  window.location.href = '/dashboard'; 
+              } else {
+                  alert('Failed to submit report. Please try again.');
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              alert('An error occurred while submitting the report.');
+          });
+      });
+  </script>
+  </body>
+</html>

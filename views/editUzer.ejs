@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Firm</title>
+    <style>
+      :root {
+        --theme-color: #0d47a1;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+      }
+
+      header {
+        background-color: var(--theme-color);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 10px;
+      }
+
+      .headerDiv {
+        display: flex;
+        align-items: center;
+      }
+
+      #toggleSidebar {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px); /* Adjusted for header height */
+      }
+
+      .sidebar {
+        display: flex;
+        background-color: #333;
+        padding: 10px;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .sidebar ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin: 0 15px;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar.collapsed {
+        transform: translateX(-100%);
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sidebar ul {
+          flex-direction: column;
+        }
+
+        .sidebar ul li {
+          margin: 10px 0;
+        }
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      th {
+        background-color: var(--theme-color);
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      tr:hover {
+        background-color: #ddd;
+      }
+
+      .edit-button {
+        background-color: var(--theme-color);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      .edit-button:hover {
+        background-color: #005c00;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+
+      .form-group button {
+        background-color: var(--theme-color);
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .form-group button:hover {
+        background-color: #005c00;
+      }
+
+      .logout-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .logout-button:hover {
+        background-color: #e5533c;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="headerDiv">
+        <!-- <button id="toggleSidebar">☰</button> -->
+        <h1>Security Management System</h1>
+      </div>
+      <a href="/logout"><button class="logout-button">Logout</button></a>
+    </header>
+    <div class="container">
+      <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/users">Users</a></li>
+        </ul>
+      </nav>
+      <main>
+        <h2>Edit User</h2>
+        <form id="editUserForm">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" />
+          </div>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" />
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" />
+          </div>
+          <div class="form-group">
+            <button type="submit">Update User</button>
+          </div>
+        </form>
+      </main>
+    </div>
+    <script>
+      // document
+      //   .getElementById("toggleSidebar")
+      //   .addEventListener("click", function () {
+      //     document.getElementById("sidebar").classList.toggle("collapsed");
+      //   });
+
+      document
+        .getElementById("editUserForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const url = window.location.href;
+
+          const userId = url.split("/").pop();
+
+          const username = document.getElementById("username").value;
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          if (!userId) {
+            alert("User ID is missing!");
+            return;
+          }
+
+          const response = await fetch("http://localhost:3000/editUser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ userId, username, email, password }),
+          });
+
+          const data = await response.json();
+
+          if (data.Status === "Success") {
+            alert("User updated successfully!");
+            window.location.href = `/users`;
+          } else {
+            alert(`Error: ${data.message}`);
+          }
+        });
+    </script>
+  </body>
+</html>

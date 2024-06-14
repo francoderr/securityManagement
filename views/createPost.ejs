@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Firm</title>
+    <style>
+      :root {
+        --theme-color: #0d47a1;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+      }
+
+      header {
+        background-color: var(--theme-color);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 10px;
+      }
+
+      .headerDiv {
+        display: flex;
+        align-items: center;
+      }
+
+      #toggleSidebar {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px); /* Adjusted for header height */
+      }
+
+      .sidebar {
+        display: flex;
+        background-color: #333;
+        padding: 10px;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .sidebar ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin: 0 15px;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar.collapsed {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sidebar ul {
+          flex-direction: column;
+        }
+
+        .sidebar ul li {
+          margin: 10px 0;
+        }
+      }
+
+      .logout-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .logout-button:hover {
+        background-color: #e5533c;
+      }
+      .container2 {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        color: #0d47a1;
+      }
+      label {
+        display: block;
+        margin-top: 10px;
+        color: #0d47a1;
+      }
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        background-color: #0d47a1;
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #08306b;
+      }
+      .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+      }
+      .back-btn a {
+        background-color: #0d47a1;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+      .back-btn a:hover {
+        background-color: #08306b;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="headerDiv">
+        <!-- <button id="toggleSidebar">☰</button> -->
+        <h1>Security Management System</h2>
+      </div>
+      <a href="/logout"><button class="logout-button">Logout</button></a>
+    </header>
+    <div class="container">
+      <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/viewPosts">View Posts</a></li>
+          <li><a href="/createPost">Create Post</a></li>
+          <!-- <li><a href="/users">admin</a></li> -->
+          <li><a href="/assignPost">Assign post</a></li>
+          <li><a href="/createReport">Create Report</a></li>
+          <li><a href="/viewReport">View Reports</a></li>
+          <li><a href="/users">Users</a></li>
+
+        </ul>
+      </nav>
+      <main>
+        <div class="container2">
+          <h2>Create Post</h1>
+          <form id="postForm">
+            <label for="postName">Post Name:</label>
+            <input type="text" id="postName" name="postName" required />
+
+            <label for="description">Description:</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="5"
+              required
+            ></textarea>
+
+            <button type="submit">Create Post</button>
+          </form>
+        </div>
+      </main>
+    </div>
+    <script>
+      document
+        .getElementById("postForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+          const postName = document.getElementById("postName").value;
+          const description = document.getElementById("description").value;
+
+          const data = {
+            postName: postName,
+            description: description,
+          };
+
+          fetch("http://localhost:3000/createPost", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => {
+              if (response.ok) {
+                return response.json();
+              } else {
+                throw new Error("Failed to create post");
+              }
+            })
+            .then((data) => {
+              alert(data.message);
+              // Optionally, redirect to another page after successful creation
+              window.location.href = "./dashboard";
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+              alert(
+                "An error occurred while creating the post: " + error.message
+              );
+            });
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Firm</title>
+    <style>
+      :root {
+      --theme-color: #0d47a1;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    header {
+      background-color: var(--theme-color);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 10px;
+    }
+
+    .headerDiv {
+      display: flex;
+      align-items: center;
+    }
+
+    #toggleSidebar {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 100px); /* Adjusted for header height */
+    }
+
+    .sidebar {
+      display: flex;
+      background-color: #333;
+      padding: 10px;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+    .sidebar ul {
+      display: flex;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li {
+      margin: 0 15px;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .sidebar.collapsed {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sidebar ul {
+        flex-direction: column;
+      }
+
+      .sidebar ul li {
+        margin: 10px 0;
+      }
+    }
+
+    .logout-button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #e5533c;
+    }
+
+    .container2 {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+      h2 {
+        text-align: center;
+        color: #0d47a1;
+      }
+      .card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .card h3 {
+        margin-top: 0;
+        color: #0d47a1;
+      }
+      .card p {
+        margin: 10px 0;
+      }
+
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="headerDiv">
+        <!-- <button id="toggleSidebar">☰</button> -->
+        <h1>Security Management System</h1>
+      </div>
+      <a href="/logout"><button class="logout-button">Logout</button></a>
+    </header>
+    <div class="container">
+      <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/createReport">Create Report</a></li>
+          <li><a href="/viewReport">View Reports</a></li>
+          <li><a href="/admin">admin</a></li>
+        </ul>
+      </nav>
+      <main>
+        <div class="container2">
+          <h2>View Reports</h1>
+
+          <div id="reportContainer"></div>
+        </div>
+      </main>
+    </div>
+    <script>
+      window.addEventListener("load", function () {
+        fetchReports();
+      });
+
+      function fetchReports() {
+        fetch("http://localhost:3000/getReports")
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            if (data.Status === "Success") {
+              const reports = data.reports;
+              const reportContainer =
+                document.getElementById("reportContainer");
+              reports.forEach((report) => {
+                const card = `
+                            <div class="card">
+                                <h3>${report.title}</h3>
+                                <p><strong>Officer Name:</strong> ${report.name}</p>
+                                <p><strong>Assigned Post:</strong> ${report.post}</p>
+                                <p><strong>Date:</strong> ${report.date}</p>
+                                <p><strong>Details:</strong> ${report.content}</p>
+                            </div>
+                        `;
+                reportContainer.insertAdjacentHTML("beforeend", card);
+              });
+            } else {
+              throw new Error(data.message || "Unknown error occurred");
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("An error occurred while fetching reports: " + error.message);
+          });
+      }
+    </script>
+  </body>
+</html>

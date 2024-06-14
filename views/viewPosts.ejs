@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Firm</title>
+    <style>
+      :root {
+        --theme-color: #0d47a1;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+      }
+
+      header {
+        background-color: var(--theme-color);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 30px 30px;
+      }
+
+      .headerDiv {
+        display: flex;
+        align-items: center;
+      }
+
+      #toggleSidebar {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px); /* Adjusted for header height */
+      }
+
+      .sidebar {
+        display: flex;
+        background-color: #333;
+        padding: 10px;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .sidebar ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin: 0 15px;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar.collapsed {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sidebar ul {
+          flex-direction: column;
+        }
+
+        .sidebar ul li {
+          margin: 10px 0;
+        }
+      }
+
+      .logout-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .logout-button:hover {
+        background-color: #e5533c;
+      }
+
+      .post-container {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin-bottom: 20px;
+        margin-left: 100px;
+        margin-right: 100px;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .post-container:hover {
+        transform: translateY(-5px);
+      }
+
+      .post-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0d47a1;
+        margin-bottom: 10px;
+      }
+
+      .post-description {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 15px;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="headerDiv">
+        <!-- <button id="toggleSidebar">☰</button> -->
+        <h1>Security Management System</h1>
+      </div>
+      <a href="/logout"><button class="logout-button">Logout</button></a>
+    </header>
+    <div class="container">
+      <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/viewPosts">View Posts</a></li>
+          <li><a href="/createPost">Create Post</a></li>
+          <!-- <li><a href="/users">admin</a></li> -->
+          <li><a href="/assignPost">Assign post</a></li>
+          <li><a href="/createReport">Create Report</a></li>
+          <li><a href="/viewReport">View Reports</a></li>
+          <li><a href="/users">Users</a></li>
+        </ul>
+      </nav>
+      <main>
+        <h1>View Posts</h1>
+        <br />
+        <div id="postsContainer"></div>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        fetch("http://localhost:3000/getPosts")
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.Status === "Success") {
+              const postsContainer = document.getElementById("postsContainer");
+              data.posts.forEach((post) => {
+                const postDiv = document.createElement("div");
+                postDiv.classList.add("post-container");
+
+                const title = document.createElement("h3");
+                title.textContent = post.name;
+                title.classList.add("post-title");
+                postDiv.appendChild(title);
+
+                const description = document.createElement("p");
+                description.textContent = post.description;
+                description.classList.add("post-description");
+                postDiv.appendChild(description);
+
+                postsContainer.appendChild(postDiv);
+              });
+            } else {
+              console.error("Failed to fetch posts");
+            }
+          })
+          .catch((error) => console.error("Error fetching posts:", error));
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Firm</title>
+  <style>
+    :root {
+      --theme-color: #0d47a1;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+    }
+
+    header {
+      background-color: var(--theme-color);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 10px;
+    }
+
+    .headerDiv {
+      display: flex;
+      align-items: center;
+    }
+
+    #toggleSidebar {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 100px); /* Adjusted for header height */
+    }
+
+    .sidebar {
+      display: flex;
+      background-color: #333;
+      padding: 10px;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+    .sidebar ul {
+      display: flex;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sidebar ul li {
+      margin: 0 15px;
+    }
+
+    .sidebar ul li a {
+      text-decoration: none;
+      color: white;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .sidebar.collapsed {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sidebar ul {
+        flex-direction: column;
+      }
+
+      .sidebar ul li {
+        margin: 10px 0;
+      }
+    }
+
+    .logout-button {
+      background-color: black;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .logout-button:hover {
+      background-color: #e5533c;
+    }
+
+    /* 
+     */
+
+     .container2 {
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .welcome-section h1 {
+            font-size: 32px;
+            color: #0d47a1;
+        }
+        .welcome-section p {
+            font-size: 18px;
+            color: #1976d2;
+        }
+        .content-section {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .content-box {
+            flex: 1;
+            margin: 10px;
+            padding: 20px;
+            border: 1px solid #90caf9;
+            border-radius: 10px;
+            background: #e3f2fd;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+        .content-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        .content-box h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #0d47a1;
+        }
+        .content-box p {
+            font-size: 16px;
+            color: #1976d2;
+        }
+    
+  </style>
+</head>
+<body>
+  <header>
+    <div class="headerDiv">
+      <!-- <button id="toggleSidebar">☰</button> -->
+      <h1>Security Management System</h1>
+    </div>
+    <a href="/logout"><button class="logout-button">Logout</button></a>
+  </header>
+  <div class="container">
+    <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/viewPosts">View Posts</a></li>
+          <li><a href="/createPost">Create Post</a></li>
+          <!-- <li><a href="/users">admin</a></li> -->
+          <li><a href="/assignPost">Assign post</a></li>
+          <li><a href="/createReport">Create Report</a></li>
+          <li><a href="/viewReport">View Reports</a></li>
+          <li><a href="/users">Users</a></li>
+
+        </ul>
+      </nav>
+    <main>
+      <div class="container2">
+        <div class="welcome-section">
+            <h2>Admin</h2>
+            <h1>Welcome to KIST Online Security Management System</h1>
+            <p>Your trusted partner in security management.</p>
+        </div>
+        <div class="content-section">
+            <div class="content-box" onclick="location.href='/createPost'">
+                <h2>Create Post</h2>
+                <p>Create a post where security personnel will be located</p>
+                <p>You will then assign a personnel</p>
+            </div>
+            <div class="content-box" onclick="location.href='/viewPosts'">
+                <h2>View Posts</h2>
+                <p>View a list of all the posts currently created</p>
+                <!-- <p></p> -->
+            </div>
+            <div class="content-box" onclick="location.href='/assignPost'">
+                <h2>Assign Posts</h2>
+                <p>Assign a security personnel to one of the posts</p>
+                <!-- <p>to be viewed by your superiors and colleagues</p> -->
+            </div>
+            </div>
+        <div class="content-section">
+            <div class="content-box" onclick="location.href='/createReport'">
+                <h2>Create Report</h2>
+                <p>Create a report about what's happening in your post</p>
+                <p>to be viewed by your superiors and colleagues</p>
+            </div>
+            <div class="content-box" onclick="location.href='/viewReport'">
+                <h2>View Reports</h2>
+                <p>Get updated on what your colleagues and superiors post</p>
+            </div>
+            <div class="content-box" onclick="location.href='/users'">
+                <h2>View Users</h2>
+                <p>View a list of all the users of the system</p>
+                <p>Edit user details</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    </main>
+  </div>
+  <script>
+    
+  </script>
+</body>
+</html>

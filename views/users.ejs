@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Security Firm</title>
+    <style>
+      :root {
+        --theme-color: #0d47a1;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+      }
+
+      header {
+        background-color: var(--theme-color);
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 10px;
+      }
+
+      .headerDiv {
+        display: flex;
+        align-items: center;
+      }
+
+      #toggleSidebar {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 100px); /* Adjusted for header height */
+      }
+
+      .sidebar {
+        display: flex;
+        background-color: #333;
+        padding: 10px;
+        width: 100%;
+        justify-content: space-around;
+      }
+
+      .sidebar ul {
+        display: flex;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .sidebar ul li {
+        margin: 0 15px;
+      }
+
+      .sidebar ul li a {
+        text-decoration: none;
+        color: white;
+      }
+
+      main {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+      }
+
+      .sidebar.collapsed {
+        display: none;
+      }
+
+      @media (max-width: 768px) {
+        .sidebar {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sidebar ul {
+          flex-direction: column;
+        }
+
+        .sidebar ul li {
+          margin: 10px 0;
+        }
+      }
+
+      /* Add this CSS to your existing styles */
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+
+      th {
+        background-color: var(--theme-color);
+        color: white;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      tr:hover {
+        background-color: #ddd;
+      }
+
+      .edit-button {
+        background-color: var(--theme-color);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+
+      .edit-button:hover {
+        background-color: #d4a056;
+      }
+
+      .logout-button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+
+      .logout-button:hover {
+        background-color: #e5533c;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="headerDiv">
+        <!-- <button id="toggleSidebar">☰</button> -->
+        <h1>Security Management System</h1>
+      </div>
+      <a href="/logout"><button class="logout-button">Logout</button></a>
+    </header>
+    <div class="container">
+      <nav id="sidebar" class="sidebar">
+        <ul>
+          <li><a href="/dashboard">Home</a></li>
+          <li><a href="/viewPosts">View Posts</a></li>
+          <li><a href="/createPost">Create Post</a></li>
+          <!-- <li><a href="/users">admin</a></li> -->
+          <li><a href="/assignPost">Assign post</a></li>
+          <li><a href="/createReport">Create Report</a></li>
+          <li><a href="/viewReport">View Reports</a></li>
+          <li><a href="/users">Users</a></li>
+
+        </ul>
+      </nav>
+      <main>
+        <h2>Users</h2>
+        <table id="userTable">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Created At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <!-- User data will be dynamically added here -->
+          </tbody>
+        </table>
+      </main>
+    </div>
+    <script>
+      // document
+      //   .getElementById("toggleSidebar")
+      //   .addEventListener("click", function () {
+      //     document.getElementById("sidebar").classList.toggle("collapsed");
+      //   });
+
+      // Function to fetch users and populate the table
+      async function fetchUsers() {
+        const response = await fetch("http://localhost:3000/getUsers");
+        const data = await response.json();
+
+        const userTableBody = document.getElementById("userTableBody");
+        userTableBody.innerHTML = ""; // Clear existing data
+
+        data.users.forEach((user) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${user.username}</td>
+            <td>${user.email}</td>
+            <td>${user.role}</td>
+            <td>${new Date(user.createdAt).toLocaleDateString()}</td>
+            <td><button class="edit-button" onclick="editUser('${user._id}')">Edit</button></td>
+          `;
+          userTableBody.appendChild(row);
+        });
+      }
+
+      function editUser(userId) {
+        window.location.href = `/editUzer/${userId}`;
+      }
+
+      fetchUsers();
+    </script>
+  </body>
+</html>
