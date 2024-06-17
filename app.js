@@ -8,6 +8,12 @@ import { isAuthenticated, isAdmin } from "./middlewares/auth.js";
 import User from "./models/User.js";
 import routes from "./routes/routes.js";
 import fileUpload from 'express-fileupload';
+import path from "path";
+import { fileURLToPath } from 'url';
+
+// Convert import.meta.url to __dirname equivalent
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const app = express();
@@ -17,6 +23,8 @@ mongoose.connect("mongodb://0.0.0.0:27017/ChirahsDB2", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
