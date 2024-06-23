@@ -135,8 +135,6 @@
       .card p {
         margin: 10px 0;
       }
-
-
     </style>
   </head>
   <body>
@@ -157,13 +155,14 @@
         </ul>
       </nav>
       <main>
+        <button id="downloadPdf" class="logout-button">Download PDF</button>
         <div class="container2">
           <h2>View Reports</h1>
-
-          <div id="reportContainer"></div>
-        </div>
+            <div id="reportContainer"></div>
+          </div>
       </main>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
       window.addEventListener("load", function () {
         fetchReports();
@@ -203,6 +202,39 @@
             alert("An error occurred while fetching reports: " + error.message);
           });
       }
+
+      document.getElementById("downloadPdf").addEventListener("click", () => {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const reportContainer = document.getElementById("reportContainer");
+        const reports = reportContainer.querySelectorAll(".card");
+        
+        let yOffset = 10;
+
+        reports.forEach((report, index) => {
+          const title = report.querySelector("h3").textContent;
+          const officerName = report.querySelector("p:nth-of-type(1)").textContent;
+          const assignedPost = report.querySelector("p:nth-of-type(2)").textContent;
+          const date = report.querySelector("p:nth-of-type(3)").textContent;
+          const details = report.querySelector("p:nth-of-type(4)").textContent;
+
+          doc.text(`Report ${index + 1}`, 10, yOffset);
+          yOffset += 10;
+          doc.text(title, 10, yOffset);
+          yOffset += 10;
+          doc.text(officerName, 10, yOffset);
+          yOffset += 10;
+          doc.text(assignedPost, 10, yOffset);
+          yOffset += 10;
+          doc.text(date, 10, yOffset);
+          yOffset += 10;
+          doc.text(details, 10, yOffset);
+          yOffset += 20; // Extra space between reports
+        });
+
+        doc.save("reports.pdf");
+      });
     </script>
   </body>
 </html>
