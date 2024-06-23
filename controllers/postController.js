@@ -54,10 +54,12 @@ export const assignPost = async (req, res) => {
   console.log("called assingPost");
   let postId = req.body.postId;
   let personnel = req.body.username;
-  let personnelId = req.user._id;
-  personnelId = personnelId.toString();
-  console.log("req.user");
-  console.log(req.user);
+  let personnelId = req.body.userId;
+  // personnelId = personnelId.toString();
+  // console.log("req.user");
+  // console.log(req.user);
+  // console.log('req.body')
+  // console.log(req.body)
 
   let post = await PostModel.findOne({ _id: new ObjectId(postId) });
   if (!post) {

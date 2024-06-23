@@ -9,6 +9,8 @@ export const getUsers = async (req, res) => {
       },
       {
         $project: {
+          id: "$_id",
+          _id: 0,
           username: 1,
           email: 1,
           role: 1,
@@ -59,8 +61,10 @@ export const editUser = async (req, res) => {
       if (username) user.username = username;
       if (email) user.email = email;
       if (password) {
-          const salt = await bcrypt.genSalt(10);
-          user.password = await bcrypt.hash(password, salt);
+          // const salt = await bcrypt.genSalt(10);
+          // user.password = await bcrypt.hash(password, salt);
+          user.password = password;
+          
       }
 
       await user.save();

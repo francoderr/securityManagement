@@ -200,7 +200,7 @@
             const selectedUserOption =
               document.getElementById("users").selectedOptions[0];
             const username = selectedUserOption.text;
-            const userId = selectedUserOption.value.split("(")[1].slice(0, -1); // Extracting userId from combined string
+            const userId = selectedUserOption.value; // Extracting userId 
 
             const selectedPostOption =
               document.getElementById("posts").selectedOptions[0];
@@ -221,7 +221,7 @@
           const usersDropdown = document.getElementById("users");
           data.users.forEach((user) => {
             const option = document.createElement("option");
-            option.value = `${user.username}(${user.id})`; // Combine username and ID
+            option.value = `${user.id}`; // Combine username and ID
             option.text = user.username; // Display only the username
             usersDropdown.add(option);
           });
